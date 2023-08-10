@@ -1,0 +1,6 @@
+mantis:
+  base_url: 멘티스 주소
+  api_token: 멘티스 토큰
+  projects:
+    - 프로젝트 이름1
+    - 프로젝트 이름2
