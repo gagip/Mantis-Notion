@@ -2,3 +2,5 @@
 .vscode
 __pycache__
 config.yaml
+data.json
+*.ipynb

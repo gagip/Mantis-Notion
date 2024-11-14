@@ -4,3 +4,5 @@ mantis:
   projects:
     - 프로젝트 이름1
     - 프로젝트 이름2
+notion:
+  api_token: 노션 토큰
