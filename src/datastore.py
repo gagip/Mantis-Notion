@@ -20,11 +20,12 @@ class DataStore:
         # key에 해당하는 값을 반환
         return self.data.get(key)
     
-    def set(self, key: str, value):
-        # key와 value를 저장
-        self.data[key] = value
-        
-    def delete(self, key: str):
-        # key에 해당하는 값을 삭제
-        del self.data[key]
-    
+    def add(self, key: str, value):
+        # key에 해당하는 값이 리스트인지 확인하고, 아니면 리스트로 초기화
+        if key in self.data:
+            if isinstance(self.data[key], list):
+                self.data[key].append(value)
+            else:
+                raise TypeError(f"키 '{key}'에 대한 값이 리스트가 아닙니다.")
+        else:
+            self.data[key] = [value]
