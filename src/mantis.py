@@ -57,9 +57,9 @@ class MantisAPI:
     
     def get_issues_in_a_project(self, project_id) -> list[Issue]:
         data = {
-            "project_id": project_id,
-            "page_size": 50,
-            "page": 1
+            'project_id': project_id,
+            'page_size': 50,
+            'page': 1
         }
         res = self.call_api('api/rest/issues', data = data)
         if res:

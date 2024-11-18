@@ -28,7 +28,7 @@ def execute():
 
         aos_issues = [issue for issue in issues if is_new_aos_issue(issue)]
         aos_issues.sort(key=lambda x: x.update_date, reverse=True)
-        saved_aos_issues = data_store.get("aos_issues")
+        saved_aos_issues = data_store.get('aos_issues')
         if saved_aos_issues:
             new_aos_issues = [issue for issue in aos_issues if issue.id not in saved_aos_issues]
         else:
@@ -57,13 +57,13 @@ def execute():
         for issue in new_aos_issues:
             res = notionAPI.add_data(make_request(issue.summary, issue.id))
             if res:
-                data_store.add("aos_issues", issue.id)
+                data_store.add('aos_issues', issue.id)
                 data_store.save()
-                print(f"데이터가 성공적으로 저장했습니다 ({issue.id})")
+                print(f'데이터가 성공적으로 저장했습니다 ({issue.id})')
 
 if __name__ == '__main__':
     while True:
-        pprint("실행")
+        pprint('실행')
         execute()
-        pprint("실행 완료")
+        pprint('실행 완료')
         time.sleep(60)

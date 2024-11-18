@@ -26,6 +26,6 @@ class DataStore:
             if isinstance(self.data[key], list):
                 self.data[key].append(value)
             else:
-                raise TypeError(f"키 '{key}'에 대한 값이 리스트가 아닙니다.")
+                raise TypeError(f'키 \'{key}\'에 대한 값이 리스트가 아닙니다.')
         else:
             self.data[key] = [value]
