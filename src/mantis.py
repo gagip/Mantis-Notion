@@ -1,6 +1,9 @@
 from datetime import date, datetime
 import requests
 from dataclasses import dataclass
+from .logger import setup_logger
+
+logger = setup_logger(__name__)
 
 
 @dataclass
@@ -40,16 +43,8 @@ class MantisAPI:
             'Authorization': api_token,
         }
         
-    def call_api(self, endpoint, data = None):
-        response = requests.get(f'{self.base_url}/{endpoint}', headers=self.headers, data=data)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            print(f'API 호출 실패, HTTP 상태 코드: {response.status_code}, 내용: {response.text}')
-            return None
-        
     def get_all_project(self):
-        res = self.call_api('api/rest/projects')
+        res = self._call_api('api/rest/projects')
         if res:
             return [map_to_project(item) for item in res['projects']]
         else:
@@ -61,9 +56,19 @@ class MantisAPI:
             'page_size': 50,
             'page': 1
         }
-        res = self.call_api('api/rest/issues', data = data)
+        res = self._call_api('api/rest/issues', data = data)
         if res:
             issues = res['issues']
             return [map_to_issue(item) for item in issues]
         
         raise RuntimeError('API 호출 실패')
+
+    def _call_api(self, endpoint, data = None):
+        logger.info(f'{endpoint} 호출 시작')
+        response = requests.get(f'{self.base_url}/{endpoint}', headers=self.headers, data=data)
+        if response.status_code == 200:
+            logger.info(f'{endpoint} 호출 성공')
+            return response.json()
+        else:
+            logger.error(f'API 호출 실패, HTTP 상태 코드: {response.status_code}, 내용: {response.text}')
+            return None
