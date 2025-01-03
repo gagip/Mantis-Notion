@@ -3,7 +3,7 @@ import time
 
 import yaml
 
-from src.notion import NotionAPI
+from src.notion import NotionAPI, post_bug_report
 from src.datastore import DataStore
 from src.mantis import Issue, MantisAPI
 from src.logger import setup_logger
@@ -46,27 +46,14 @@ def execute():
         database_id = notion['database_id']
         notionAPI = NotionAPI(api_token, database_id)
 
-        def make_request(title: str, issue_id: int):
-            return {
-                '작업 이름': {
-                    'title': [{
-                        'text': {
-                            'content': f'{title} (#{issue_id})',
-                        },
-                    }]
-                },
-                '태그': {
-                    'multi_select': [{'name': '버그 수정'}]
-                }
-            }
-
-        for issue in new_aos_issues:
-            res = notionAPI.add_data(make_request(issue.summary, issue.id))
-            if res:
-                logger.debug(res)
-                data_store.add('aos_issues', issue.id)
-                data_store.save()
-                logger.debug(f'데이터가 성공적으로 저장했습니다 ({issue.id})')
+        for issue in new_aos_issues:            
+            res = post_bug_report(notionAPI, issue)
+            assert res
+            
+            logger.debug(res)
+            data_store.add('aos_issues', issue.id)
+            data_store.save()
+            logger.debug(f'데이터가 성공적으로 저장했습니다 ({issue.id})')
 
 if __name__ == '__main__':
     while True:

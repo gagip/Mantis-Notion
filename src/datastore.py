@@ -15,8 +15,12 @@ class DataStore:
         with open(self.path, 'w') as f:
             json.dump(self.data, f)
 
-    def get(self, key: str):
-        return self.data.get(key)
+    def get(self, key: str) -> list[int]:
+        result = self.data.get(key)
+        assert isinstance(result, list | None)
+        if not result:
+            return []
+        return result
     
     def add(self, key: str, value):
         if key not in self.data:
